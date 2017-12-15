@@ -22,7 +22,7 @@ def equal_distribution_folds(y, folds=2):
 
     # Compute sample distribution over classes
     dist = y.sum(axis=0).astype('float')
-    dist /= dist.sum()
+    dist = int(dist / dist.sum())
 
     index_list = []
     fold_dist = np.zeros((folds, classes), dtype='float')
@@ -32,7 +32,7 @@ def equal_distribution_folds(y, folds=2):
         if i < folds:
             target_fold = i
         else:
-            normed_folds = fold_dist.T / fold_dist.sum(axis=1)
+            normed_folds = int(fold_dist.T / fold_dist.sum(axis=1))
             how_off = normed_folds.T - dist
             target_fold = np.argmin(np.dot((y[i] - .5).reshape(1, -1), how_off.T))
         fold_dist[target_fold] += y[i]
